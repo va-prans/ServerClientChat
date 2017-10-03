@@ -19,7 +19,6 @@ public class Server
     {
         try
         {
-
             server = new ServerSocket(6789, 100);
             while (true)
             {
