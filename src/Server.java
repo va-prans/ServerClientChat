@@ -24,9 +24,11 @@ public class Server
             {
                 try
                 {
+
                     waitForConnection();
                     setupStreams();
                     whileOpen();
+
                 }
                 catch (EOFException eofException)
                 {
