@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
     Socket socket;
-    private String username;
+    private String username = "";
     private boolean authorized = false;
     private final OnUserMessage onUserMessage;
     private ChatProtocol chatProtocol = new ChatProtocol();
@@ -24,17 +24,33 @@ public class ServerThread extends Thread {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((message = bufferedReader.readLine()) != null) {
 
-                String pMessage = chatProtocol.handleUserMessage(message);
+                if (message.length() < 4) {
+                    continue;
+                }
 
-//                if (pMessag)
-                //returns JOIN SUCCESS
-                //then authorize and add username
+                String pMessage = chatProtocol.handleUserMessage(message, socket.getInetAddress().toString());
 
-                //onUserMessage.messageUpdate(message);
+                String authenticationMsg = pMessage.substring(0,4);
 
-
-
-
+                switch (authenticationMsg) {
+                    case "J_OK":
+                        authorized = true;
+                        username = pMessage.substring(4, pMessage.length());
+                        sendToUser(authenticationMsg);
+                        break;
+                    case "J_ER":
+                        sendToUser(authenticationMsg);
+                        break;
+                    case "DATA":
+                        if (authorized) {
+                            String messageToSend = pMessage.substring(4, pMessage.length());
+                            onUserMessage.messageUpdate(messageToSend);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                
             }
             socket.close();
         } catch (IOException e) {

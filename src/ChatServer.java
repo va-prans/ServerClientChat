@@ -25,7 +25,7 @@ public class ChatServer {
             Socket socket = serverSocket.accept();
             ServerThread serverThread = new ServerThread(socket, message -> {
 
-                System.out.println("NEW USER MSG: " + message);
+                System.out.println("User input to server: " + message);
                 for (ServerThread user : ChatServer.users) {
 
                     user.sendToUser(message);
