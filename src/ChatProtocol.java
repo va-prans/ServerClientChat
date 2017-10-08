@@ -27,8 +27,9 @@ public class ChatProtocol {
 
     private String handleJoin(String message){
 
-        if (message.length() > 3) {
-            String[] jCommands = message.split(" ");
+        String[] jCommands = message.split(" ");
+
+        if (jCommands.length > 2) {
             String userName = jCommands[1].replace(",", "");
             String ipPort = jCommands[2];
 
@@ -41,7 +42,6 @@ public class ChatProtocol {
                 if (user.getUsername().equals(userName)){
                     return "J_ER 420: Username exists.";
                 }
-
             }
 
             if (userName.length() > 12){
@@ -53,10 +53,10 @@ public class ChatProtocol {
             }
 
             return "J_OK" + userName;
-
         }
 
-        return "J_ER 499: No inpur";
+
+        return "J_ER 499: Join command format error. Must be 'JOIN <<user_name>>, <<server_ip>>:<<server_port>>'";
     }
 
     private String handleData(String message, String ip) {
@@ -81,7 +81,7 @@ public class ChatProtocol {
         return "";
     }
     private String handleQuit(String message) {
-        return "";
+        return "QUIT";
     }
 
 }

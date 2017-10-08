@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalTime;
 
 public class ServerThread extends Thread {
     Socket socket;
@@ -20,7 +21,6 @@ public class ServerThread extends Thread {
     public void run() {
         try {
             String message = null;
-            PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((message = bufferedReader.readLine()) != null) {
 
@@ -34,12 +34,15 @@ public class ServerThread extends Thread {
 
                 switch (authenticationMsg) {
                     case "J_OK":
-                        authorized = true;
                         username = pMessage.substring(4, pMessage.length());
-                        sendToUser(authenticationMsg);
+                        onUserMessage.messageUpdate(username + " has joined the channel.");
+                        authorized = true;
+                        sendToUser("INCOMING MESSAGE FROM SERVER: " + authenticationMsg);
+                        ChatServer.usernameList.add(username);
+                        onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
                         break;
                     case "J_ER":
-                        sendToUser(authenticationMsg);
+                        sendToUser("INCOMING MESSAGE FROM SERVER: " + pMessage);
                         break;
                     case "DATA":
                         if (authorized) {
@@ -47,10 +50,23 @@ public class ServerThread extends Thread {
                             onUserMessage.messageUpdate(messageToSend);
                         }
                         break;
+                    case "QUIT":
+                        if (authorized) {
+                            sendToUser("SESSION ENDED AT " + LocalTime.now().toString());
+                            authorized = false;
+                            ChatServer.users.remove(this);
+                            ChatServer.usernameList.remove(username);
+                            onUserMessage.messageUpdate(username + " has left the channel.");
+                            onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
+                            socket.shutdownInput();
+                            socket.shutdownOutput();
+                            socket.close();
+                        }
+                        break;
                     default:
                         break;
                 }
-                
+
             }
             socket.close();
         } catch (IOException e) {
@@ -60,11 +76,8 @@ public class ServerThread extends Thread {
 
     public void sendToUser(String message){
         try {
-            if (authorized){
-                PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-                printWriter.println("INCOMING MESSAGE FROM USERS: " + message);
-            }
-
+            PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+            printWriter.println(message);
         } catch (IOException e) {
             e.printStackTrace();
         }

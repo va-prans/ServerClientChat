@@ -8,34 +8,36 @@ import java.net.Socket;
  * Created by CIA on 03/10/2017.
  */
 public class ChatClient {
+    static boolean running = true;
     public static void main(String[] args) throws IOException {
         Socket socket = new Socket("localhost", 4444);
         BufferedReader bufferedReaderFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader bufferedReaderFromCmd = new BufferedReader(new InputStreamReader(System.in));
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true){
-                        System.out.println(bufferedReaderFromClient.readLine());
+        Thread thread = new Thread(() -> {
+            try {
+                while (true){
 
+                    String line = bufferedReaderFromClient.readLine();
+                    if (line == null){
+                        running = false;
+                        break;
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println(line);
                 }
+                System.out.println("Listen thread closed. Ending program");
+                System.exit(0);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         thread.start();
 
-        while (true) {
+        while (running) {
             String readerInput = bufferedReaderFromCmd.readLine();
             printWriter.println(readerInput);
-
         }
-
-
     }
 }
 
