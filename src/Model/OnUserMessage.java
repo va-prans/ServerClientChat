@@ -1,3 +1,5 @@
+package Model;
+
 /**
  * Created by CIA on 08/10/2017.
  */

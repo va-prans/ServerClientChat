@@ -1,9 +1,11 @@
+package Model;
+
 /**
  * Created by CIA on 08/10/2017.
  */
 public class ChatProtocol {
 
-    String serverIpPort = "localhost:4444";
+    String serverIpPort = "127.0.0.1:4444";
 
     public String handleUserMessage(String message, String ip){
         String pCommand = message.substring(0, 4);
@@ -37,11 +39,8 @@ public class ChatProtocol {
                 return "J_ER 419: Wrong IP:PORT";
             }
 
-            for (ServerThread user : ChatServer.users) {
-
-                if (user.getUsername().equals(userName)){
-                    return "J_ER 420: Username exists.";
-                }
+            if (ChatServer.usernameList.contains(userName)) {
+                return "J_ER 420: Username exists.";
             }
 
             if (userName.length() > 12){
