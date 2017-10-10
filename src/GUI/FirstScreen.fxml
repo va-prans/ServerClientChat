@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FirstController">
+<AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FirstController">
    <children>
-      <Button layoutX="128.0" layoutY="222.0" mnemonicParsing="false" onAction="#onHostBtn" prefHeight="156.0" prefWidth="239.0" text="HOST" textFill="WHITE">
+      <Button fx:id="closeBtn" layoutX="760.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseBtn" onMouseEntered="#onCloseBtnEnter" onMouseExited="#onCloseBtnExit" prefHeight="30.0" prefWidth="30.0" />
+      <Button fx:id="hostBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="67.0" layoutY="196.0" mnemonicParsing="false" onAction="#onHostBtn" onMouseEntered="#onHostBtnEnter" onMouseExited="#onHostBtnExit" prefHeight="30.0" prefWidth="69.0" textFill="WHITE">
          <font>
-            <Font name="LilyUPC" size="69.0" />
+            <Font name="LilyUPC" size="5.0" />
          </font>
       </Button>
-      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="378.0" prefHeight="156.0" prefWidth="239.0" text="Start a new server" textAlignment="CENTER">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="378.0" prefHeight="156.0" prefWidth="239.0" text="Start a new server" textAlignment="CENTER" textFill="WHITE">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -24,12 +26,12 @@
             <Font name="MS Gothic" size="20.0" />
          </font>
       </Label>
-      <Button layoutX="452.0" layoutY="222.0" mnemonicParsing="false" onAction="#onClientBtn" prefHeight="156.0" prefWidth="239.0" text="CLIENT" textFill="WHITE">
+      <Button fx:id="clientBtn" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="400.0" layoutY="196.0" mnemonicParsing="false" onAction="#onClientBtn" onMouseEntered="#onClientBtnEnter" onMouseExited="#onClientBtnExit" prefHeight="30.0" prefWidth="69.0" textFill="WHITE">
          <font>
-            <Font name="LilyUPC" size="69.0" />
+            <Font name="LilyUPC" size="5.0" />
          </font>
       </Button>
-      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="378.0" prefHeight="156.0" prefWidth="239.0" text="Connect to a server" textAlignment="CENTER">
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="378.0" prefHeight="156.0" prefWidth="239.0" text="Connect to a server" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="MS Gothic" size="20.0" />
          </font>
@@ -39,6 +41,12 @@
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
+      </Label>
+      <Button fx:id="minBtn" layoutX="728.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMinBtn" onMouseEntered="#onMinBtnEnter" onMouseExited="#onMinBtnExit" prefHeight="30.0" prefWidth="30.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" mouseTransparent="true" prefHeight="47.0" prefWidth="800.0" text="TCP/IP Network Protocol Application DAT16i" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="LilyUPC" size="33.0" />
+         </font>
       </Label>
    </children>
 </AnchorPane>

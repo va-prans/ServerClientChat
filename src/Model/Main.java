@@ -23,7 +23,7 @@ public class Main extends Application
         primaryStage.setScene(scene);
         scene.getStylesheets().add("/GUI/theme.css");
         primaryStage.setResizable(false);
-        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setOnCloseRequest(SceneHandler.confirmCloseEventHandler);
         primaryStage.show();
     }

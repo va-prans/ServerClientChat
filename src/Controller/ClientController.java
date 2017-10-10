@@ -2,12 +2,19 @@ package Controller;//Magnus Svendsen DAT16i
 
 import Handler.SceneHandler;
 import Model.ChatClient;
+import Model.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,12 +24,37 @@ public class ClientController implements Initializable
 
     //region FXML
     @FXML
+    AnchorPane rootPane;
+    @FXML
     TextField usernameField;
     @FXML
     TextField ipField;
     @FXML
     TextField portField;
+    @FXML
+    Button minBtn;
+    @FXML
+    Button closeBtn;
+    @FXML
+    Button connectBtn;
+    @FXML
+    Button backBtn;
     //endregion
+
+    //region Images
+    Image connectBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/connect.png"));
+    Image connectBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/connect_over.png"));
+    Image backBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/back.png"));
+    Image backBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/back_over.png"));
+
+    Image minBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/-.png"));
+    Image minBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/-o.png"));
+    Image closeBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/x.png"));
+    Image closeBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/xo.png"));
+    //endregion
+
+    double xOffset = 0;
+    double yOffset = 0;
 
     SceneHandler sceneHandler = new SceneHandler();
 
@@ -131,6 +163,88 @@ public class ClientController implements Initializable
         }
     }
 
+    public void onMinBtn(ActionEvent actionEvent)
+    {
+        sceneHandler.minimize();
+    }
+
+    public void onCloseBtn(ActionEvent actionEvent)
+    {
+        sceneHandler.closeProgram();
+    }
+
+    public void handleStageMovement()
+    {
+        rootPane.setOnMousePressed(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        rootPane.setOnMouseDragged(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event)
+            {
+                Main.primaryStage.setX(event.getScreenX() - xOffset);
+                Main.primaryStage.setY(event.getScreenY() - yOffset);
+            }
+        });
+    }
+
+    //region ButtonGFX
+    public void onConnectBtnEnter(MouseEvent mouseEvent)
+    {
+        connectBtn.setGraphic(new ImageView(connectBtnImageOver));
+    }
+
+    public void onConnectBtnExit(MouseEvent mouseEvent)
+    {
+        connectBtn.setGraphic(new ImageView(connectBtnImage));
+    }
+
+    public void onBackBtnEnter(MouseEvent mouseEvent)
+    {
+        backBtn.setGraphic(new ImageView(backBtnImageOver));
+    }
+
+    public void onBackBtnExit(MouseEvent mouseEvent)
+    {
+        backBtn.setGraphic(new ImageView(backBtnImage));
+    }
+
+    public void onMinBtnEnter(MouseEvent mouseEvent)
+    {
+        minBtn.setGraphic(new ImageView(minBtnImageOver));
+    }
+
+    public void onMinBtnExit(MouseEvent mouseEvent)
+    {
+        minBtn.setGraphic(new ImageView(minBtnImage));
+    }
+
+    public void onCloseBtnEnter(MouseEvent mouseEvent)
+    {
+        closeBtn.setGraphic(new ImageView(closeBtnImageOver));
+    }
+
+    public void onCloseBtnExit(MouseEvent mouseEvent)
+    {
+        closeBtn.setGraphic(new ImageView(closeBtnImage));
+    }
+
+    void setGraphics()
+    {
+        connectBtn.setGraphic(new ImageView(connectBtnImage));
+        backBtn.setGraphic(new ImageView(backBtnImage));
+        minBtn.setGraphic(new ImageView(minBtnImage));
+        closeBtn.setGraphic(new ImageView(closeBtnImage));
+    }
+    //endregion
+
     void forceNumericValues()
     {
         ipField.textProperty().addListener(new ChangeListener<String>()
@@ -162,5 +276,7 @@ public class ClientController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         forceNumericValues();
+        handleStageMovement();
+        setGraphics();
     }
 }

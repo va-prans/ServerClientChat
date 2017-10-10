@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,6 +14,7 @@ import java.util.*;
  * Created by CIA on 03/10/2017.
  */
 public class ChatServer {
+    public static String IP;
     public static final int PORT = 4444;
     public static Set<ServerThread> users = Collections.synchronizedSet(new HashSet<ServerThread>());
     public static List<String> usernameList = Collections.synchronizedList(new ArrayList<>());
@@ -21,7 +23,6 @@ public class ChatServer {
     ServerSocket serverSocket;
 
     StringProperty inputString = new SimpleStringProperty("");
-
 
     public void runServer() {
         try {

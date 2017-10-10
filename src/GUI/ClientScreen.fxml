@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ClientController">
+<AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ClientController">
    <children>
       <TextField fx:id="usernameField" alignment="CENTER" layoutX="298.0" layoutY="154.0" prefHeight="38.0" prefWidth="205.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="123.0" prefHeight="31.0" prefWidth="205.0" text="Username:" textAlignment="CENTER" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="123.0" prefHeight="31.0" prefWidth="205.0" text="Username:" textAlignment="CENTER" textFill="WHITE" />
       <Label layoutX="516.0" layoutY="165.0" text="Choose a username" visible="false">
          <font>
             <Font name="System Italic" size="12.0" />
@@ -33,22 +33,29 @@
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="192.0" prefHeight="31.0" prefWidth="205.0" text="IP address:" textAlignment="CENTER" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="192.0" prefHeight="31.0" prefWidth="205.0" text="IP address:" textAlignment="CENTER" textFill="WHITE" />
       <TextField fx:id="portField" alignment="CENTER" layoutX="298.0" layoutY="296.0" prefHeight="38.0" prefWidth="205.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="265.0" prefHeight="31.0" prefWidth="205.0" text="Port number:" textAlignment="CENTER" />
-      <Button defaultButton="true" layoutX="350.0" layoutY="368.0" mnemonicParsing="false" onAction="#onConnectBtn" prefHeight="60.0" prefWidth="101.0" text="CONNECT">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="298.0" layoutY="265.0" prefHeight="31.0" prefWidth="205.0" text="Port number:" textAlignment="CENTER" textFill="WHITE" />
+      <Button fx:id="connectBtn" defaultButton="true" layoutX="316.0" layoutY="356.0" mnemonicParsing="false" onAction="#onConnectBtn" onMouseEntered="#onConnectBtnEnter" onMouseExited="#onConnectBtnExit" prefHeight="24.0" prefWidth="39.0" textFill="WHITE">
          <font>
-            <Font name="LilyUPC" size="22.0" />
+            <Font name="LilyUPC" size="4.0" />
          </font>
       </Button>
-      <Button layoutX="350.0" layoutY="457.0" mnemonicParsing="false" onAction="#onBackBtn" prefHeight="60.0" prefWidth="101.0" text="BACK">
+      <Button fx:id="backBtn" layoutX="316.0" layoutY="438.0" mnemonicParsing="false" onAction="#onBackBtn" onMouseEntered="#onBackBtnEnter" onMouseExited="#onBackBtnExit" prefHeight="24.0" prefWidth="39.0" textFill="WHITE">
          <font>
-            <Font name="LilyUPC" size="22.0" />
+            <Font name="LilyUPC" size="6.0" />
          </font>
       </Button>
+      <Label alignment="CENTER" contentDisplay="CENTER" mouseTransparent="true" prefHeight="47.0" prefWidth="800.0" text="TCP/IP Network Protocol Application DAT16i" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="LilyUPC" size="33.0" />
+         </font>
+      </Label>
+      <Button fx:id="closeBtn" layoutX="760.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseBtn" onMouseEntered="#onCloseBtnEnter" onMouseExited="#onCloseBtnExit" prefHeight="30.0" prefWidth="30.0" />
+      <Button fx:id="minBtn" layoutX="728.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMinBtn" onMouseEntered="#onMinBtnEnter" onMouseExited="#onMinBtnExit" prefHeight="30.0" prefWidth="30.0" />
    </children>
 </AnchorPane>

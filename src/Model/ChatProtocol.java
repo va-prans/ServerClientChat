@@ -5,8 +5,6 @@ package Model;
  */
 public class ChatProtocol {
 
-    String serverIpPort = "127.0.0.1:4444";
-
     public String handleUserMessage(String message, String ip){
         String pCommand = message.substring(0, 4);
 
@@ -30,6 +28,7 @@ public class ChatProtocol {
     private String handleJoin(String message){
 
         String[] jCommands = message.split(" ");
+        String serverIpPort = ChatServer.IP + ":" + ChatServer.PORT;
 
         if (jCommands.length > 2) {
             String userName = jCommands[1].replace(",", "");

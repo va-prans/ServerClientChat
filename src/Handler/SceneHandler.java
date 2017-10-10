@@ -25,6 +25,11 @@ public class SceneHandler
                 ));
     }
 
+    public void minimize()
+    {
+        Main.primaryStage.setIconified(true);
+    }
+
     public void popup(String title, String header, String content, boolean error)
     {
         Alert alert = null;

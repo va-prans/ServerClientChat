@@ -5,16 +5,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ServerController">
+<AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ServerController">
    <children>
       <AnchorPane layoutX="78.0" layoutY="149.0" prefHeight="373.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
-            <TextArea fx:id="chatField" editable="false" layoutX="44.0" layoutY="99.0" prefHeight="373.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TextArea id="chatarea" fx:id="chatField" editable="false" layoutX="44.0" layoutY="99.0" prefHeight="373.0" prefWidth="373.0" style="-fx-text-inner-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="493.0" layoutY="149.0" prefHeight="373.0" prefWidth="232.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
-            <Label alignment="CENTER" layoutY="2.0" prefHeight="30.0" prefWidth="232.0" text="Users in chat">
+            <Label alignment="CENTER" layoutY="2.0" prefHeight="30.0" prefWidth="232.0" text="Users in chat" textFill="WHITE">
                <font>
                   <Font name="Lucida Console" size="10.0" />
                </font>
@@ -22,25 +22,32 @@
             <ListView fx:id="userList" layoutX="2.0" layoutY="37.0" prefHeight="336.0" prefWidth="232.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="36.0" />
          </children>
       </AnchorPane>
-      <Label layoutX="77.0" layoutY="51.0" prefHeight="30.0" prefWidth="647.0" text="Server up and running...">
+      <Label layoutX="77.0" layoutY="51.0" prefHeight="30.0" prefWidth="647.0" text="Server up and running..." textFill="WHITE">
          <font>
             <Font name="Lucida Console" size="17.0" />
          </font>
       </Label>
-      <Label fx:id="ipLabel" layoutX="77.0" layoutY="87.0" prefHeight="24.0" prefWidth="647.0" text="Internet Protocol address: 127.0.0.1">
+      <Label fx:id="ipLabel" layoutX="77.0" layoutY="87.0" prefHeight="24.0" prefWidth="647.0" text="Internet Protocol address: 127.0.0.1" textFill="WHITE">
          <font>
             <Font name="Lucida Console" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="portLabel" layoutX="77.0" layoutY="111.0" prefHeight="24.0" prefWidth="647.0" text="Port number: 4444">
+      <Label fx:id="portLabel" layoutX="77.0" layoutY="111.0" prefHeight="24.0" prefWidth="647.0" text="Port number: 4444" textFill="WHITE">
          <font>
             <Font name="Lucida Console" size="12.0" />
          </font>
       </Label>
-      <Button layoutX="78.0" layoutY="536.0" mnemonicParsing="false" onAction="#onDisconnectBtn" text="Disconnect">
+      <Button fx:id="disconnectBtn" layoutX="49.0" layoutY="514.0" mnemonicParsing="false" onAction="#onDisconnectBtn" onMouseEntered="#onDisconnectBtnEnter" onMouseExited="#onDisconnectBtnExit">
          <font>
-            <Font name="LilyUPC" size="23.0" />
+            <Font name="LilyUPC" size="8.0" />
          </font>
       </Button>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" mouseTransparent="true" prefHeight="47.0" prefWidth="800.0" text="TCP/IP Network Protocol Application DAT16i" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="LilyUPC" size="33.0" />
+         </font>
+      </Label>
+      <Button fx:id="minBtn" layoutX="728.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onMinBtn" onMouseEntered="#onMinBtnEnter" onMouseExited="#onMinBtnExit" prefHeight="30.0" prefWidth="30.0" />
+      <Button fx:id="closeBtn" layoutX="760.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseBtn" onMouseEntered="#onCloseBtnEnter" onMouseExited="#onCloseBtnExit" prefHeight="30.0" prefWidth="30.0" />
    </children>
 </AnchorPane>
