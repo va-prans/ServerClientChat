@@ -20,7 +20,7 @@
                   <Font name="Lucida Console" size="10.0" />
                </font>
             </Label>
-            <ListView fx:id="userList" layoutX="2.0" layoutY="37.0" prefHeight="336.0" prefWidth="232.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="36.0" />
+            <ListView fx:id="userList" layoutX="2.0" layoutY="37.0" mouseTransparent="true" prefHeight="336.0" prefWidth="232.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="36.0" />
          </children>
       </AnchorPane>
       <Label layoutX="494.0" layoutY="52.0" prefHeight="24.0" prefWidth="287.0" text="Connected to server" textFill="WHITE">
