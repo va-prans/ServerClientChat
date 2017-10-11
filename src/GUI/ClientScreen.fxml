@@ -52,7 +52,7 @@
       </Button>
       <Label alignment="CENTER" contentDisplay="CENTER" mouseTransparent="true" prefHeight="47.0" prefWidth="800.0" text="TCP/IP Network Protocol Application DAT16i" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="LilyUPC" size="33.0" />
+            <Font name="OCR A Extended" size="20.0" />
          </font>
       </Label>
       <Button fx:id="closeBtn" layoutX="760.0" layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCloseBtn" onMouseEntered="#onCloseBtnEnter" onMouseExited="#onCloseBtnExit" prefHeight="30.0" prefWidth="30.0" />
