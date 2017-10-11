@@ -109,7 +109,7 @@ public class ChatController implements Initializable
         quitBtn.setDisable(false);
         listPane.setDisable(false);
         messagePane.setDisable(false);
-
+        messageField.requestFocus();
     }
 
     public void onQuitBtn(ActionEvent actionEvent)
