@@ -136,7 +136,7 @@ public class ChatController implements Initializable
             socket.close();
 
             sceneHandler.changeScene("ClientScreen");
-        } catch (IOException e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -146,9 +146,12 @@ public class ChatController implements Initializable
     {
         try
         {
-            PrintWriter printWriter = new PrintWriter(chatClient.getSocket().getOutputStream(), true);
-            String readerInput = text;
-            printWriter.println(readerInput);
+            if (chatClient.getSocket().isConnected())
+            {
+                PrintWriter printWriter = new PrintWriter(chatClient.getSocket().getOutputStream(), true);
+                String readerInput = text;
+                printWriter.println(readerInput);
+            }
 
         } catch (IOException e)
         {
@@ -317,8 +320,12 @@ public class ChatController implements Initializable
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true)
+                while (chatClient.getSocket().isConnected())
                 {
+                    if (!chatClient.getSocket().isConnected())
+                    {
+                        break;
+                    }
                     try {
                         Thread.sleep(50000);
                         writeToServer("IMAV");
@@ -340,7 +347,7 @@ public class ChatController implements Initializable
         addChangeListeners();
         handleStageMovement();
         setGraphics();
-        chatClient.setOnExit(() -> onDisconnectBtn(null));
+        chatClient.setOnExit(() -> Platform.runLater(() -> sceneHandler.changeScene("ClientScreen")));
     }
 
 }
