@@ -110,6 +110,7 @@ public class ChatController implements Initializable
         listPane.setDisable(false);
         messagePane.setDisable(false);
         sendIMAV();
+        messageField.requestFocus();
     }
 
     public void onQuitBtn(ActionEvent actionEvent)
