@@ -29,6 +29,29 @@ public class ChatServer {
             serverSocket = new ServerSocket(PORT);
             running = true;
             System.out.println("Server ready...");
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true)
+                    {
+                        for (ServerThread serverThread : users)
+                        {
+                            if (serverThread.decrementTimeout())
+                            {
+                                serverThread.quit();
+                            }
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            thread.start();
+
             while (running) {
                 try {
                     Socket socket = serverSocket.accept();

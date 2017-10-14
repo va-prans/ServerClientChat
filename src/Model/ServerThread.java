@@ -14,6 +14,7 @@ public class ServerThread extends Thread {
     private boolean authorized = false;
     private final OnUserMessage onUserMessage;
     private ChatProtocol chatProtocol = new ChatProtocol();
+    private int timeout = 60;
 
     public ServerThread(Socket socket, OnUserMessage onUserMessage) {
 
@@ -31,6 +32,8 @@ public class ServerThread extends Thread {
                     if (message.length() < 4) {
                         continue;
                     }
+
+                    timeout = 60;
 
                     String pMessage = chatProtocol.handleUserMessage(message, socket.getInetAddress().toString());
 
@@ -57,11 +60,7 @@ public class ServerThread extends Thread {
                             break;
                         case "QUIT":
                             if (authorized) {
-                                sendToUser("SESSION ENDED");
-                                authorized = false;
-                                ChatServer.usernameList.remove(username);
-                                onUserMessage.messageUpdate(username + " has left the channel.");
-                                onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
+                                quit();
                             }
                             break;
                         default:
@@ -80,6 +79,24 @@ public class ServerThread extends Thread {
         }
     }
 
+    public void quit()
+    {
+        sendToUser("SESSION ENDED");
+        authorized = false;
+        ChatServer.usernameList.remove(username);
+        onUserMessage.messageUpdate(username + " has left the channel.");
+        onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
+        ChatServer.users.remove(this);
+
+        try {
+            socket.shutdownOutput();
+            socket.shutdownInput();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendToUser(String message){
         try {
             PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
@@ -88,6 +105,16 @@ public class ServerThread extends Thread {
             e.printStackTrace();
         }
 
+    }
+
+    public boolean decrementTimeout()
+    {
+        timeout--;
+        if (timeout < 1)
+        {
+            return true;
+        }
+        return false;
     }
 
     public Socket getSocket() {

@@ -18,6 +18,17 @@ import java.net.SocketException;
 public class ChatClient {
     Socket socket;
     StringProperty inputString = new SimpleStringProperty("");
+    OnExit onExit;
+
+    public interface OnExit
+    {
+        public void onExit();
+    }
+
+    public void setOnExit(OnExit onExit)
+    {
+        this.onExit = onExit;
+    }
 
     public boolean run(String ip, int port) {
         try {
@@ -39,6 +50,7 @@ public class ChatClient {
                         setInputString(line);
                     }
                     System.out.println("Client connection terminated.");
+                    onExit.onExit();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -109,7 +109,7 @@ public class ChatController implements Initializable
         quitBtn.setDisable(false);
         listPane.setDisable(false);
         messagePane.setDisable(false);
-
+        sendIMAV();
     }
 
     public void onQuitBtn(ActionEvent actionEvent)
@@ -311,6 +311,25 @@ public class ChatController implements Initializable
         });
     }
 
+    void sendIMAV()
+    {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true)
+                {
+                    try {
+                        Thread.sleep(50000);
+                        writeToServer("IMAV");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
@@ -320,6 +339,7 @@ public class ChatController implements Initializable
         addChangeListeners();
         handleStageMovement();
         setGraphics();
+        chatClient.setOnExit(() -> onDisconnectBtn(null));
     }
 
 }

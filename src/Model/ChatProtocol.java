@@ -76,7 +76,8 @@ public class ChatProtocol {
     }
 
     private String handleIMAV(String message) {
-        return "";
+        System.out.println(message);
+        return "IMAV";
     }
     private String handleQuit(String message) {
         return "QUIT";
