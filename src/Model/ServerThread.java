@@ -14,7 +14,7 @@ public class ServerThread extends Thread {
     private boolean authorized = false;
     private final OnUserMessage onUserMessage;
     private ChatProtocol chatProtocol = new ChatProtocol();
-    private int timeout = 5;
+    private int timeout = 60;
 
     public ServerThread(Socket socket, OnUserMessage onUserMessage) {
 
@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
                         continue;
                     }
 
-                    timeout = 5;
+                    timeout = 60;
 
                     String pMessage = chatProtocol.handleUserMessage(message, socket.getInetAddress().toString());
 
