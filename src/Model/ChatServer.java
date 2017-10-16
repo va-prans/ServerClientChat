@@ -84,6 +84,10 @@ public class ChatServer {
         running = false;
         try
         {
+            for (ServerThread serverThread : users)
+            {
+                serverThread.shutdownSocket();
+            }
             serverSocket.close();
         } catch (IOException e)
         {

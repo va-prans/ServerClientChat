@@ -42,11 +42,11 @@ public class ServerThread extends Thread {
                     switch (authenticationMsg) {
                         case "J_OK":
                             username = pMessage.substring(4, pMessage.length());
-                            onUserMessage.messageUpdate(username + " has joined the channel.");
+                            onUserMessage.messageUpdate("DATA " + username + ": has joined the channel.");
                             authorized = true;
                             sendToUser(authenticationMsg);
                             ChatServer.usernameList.add(username);
-                            onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
+                            onUserMessage.messageUpdate("LIST " + userStringList());
                             break;
                         case "J_ER":
                             sendToUser(pMessage);
@@ -55,7 +55,7 @@ public class ServerThread extends Thread {
                             if (authorized) {
                                 int length = 5 + username.length();
                                 String messageToSend = pMessage.substring(length, pMessage.length());
-                                onUserMessage.messageUpdate(username + ":" + messageToSend);
+                                onUserMessage.messageUpdate("DATA " + username + ":" + messageToSend);
                             }
                             break;
                         case "QUIT":
@@ -67,11 +67,9 @@ public class ServerThread extends Thread {
                             break;
                     }
                 }
-                socket.close();
-                ChatServer.users.remove(this);
+                quit();
             } catch (SocketException se) {
-                socket.close();
-                ChatServer.users.remove(this);
+                quit();
             }
 
         } catch (IOException e) {
@@ -81,13 +79,17 @@ public class ServerThread extends Thread {
 
     public void quit()
     {
-        sendToUser("SESSION ENDED");
         authorized = false;
         ChatServer.usernameList.remove(username);
-        onUserMessage.messageUpdate(username + " has left the channel.");
-        onUserMessage.messageUpdate("LIST OF USERS: " + ChatServer.usernameList.toString());
+        onUserMessage.messageUpdate("DATA " + username + ": has left the channel.");
+        onUserMessage.messageUpdate("LIST " + userStringList());
         ChatServer.users.remove(this);
 
+        shutdownSocket();
+    }
+
+    public void shutdownSocket()
+    {
         try {
             socket.shutdownOutput();
             socket.shutdownInput();
@@ -95,6 +97,16 @@ public class ServerThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    String userStringList()
+    {
+        String userString = "";
+        for (String s : ChatServer.usernameList)
+        {
+            userString += s + " ";
+        }
+        return userString;
     }
 
     public void sendToUser(String message){

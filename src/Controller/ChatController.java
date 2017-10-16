@@ -12,16 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +29,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable
@@ -37,17 +39,15 @@ public class ChatController implements Initializable
     @FXML
     AnchorPane rootPane;
     @FXML
-    TextArea chatField;
+    ScrollPane chatScroll;
+    @FXML
+    TextFlow chatField;
     @FXML
     TextArea messageField;
     @FXML
     ListView<String> userList;
     @FXML
     Button sendBtn;
-    @FXML
-    Button joinBtn;
-    @FXML
-    Button quitBtn;
     @FXML
     Label ipLabel;
     @FXML
@@ -67,17 +67,11 @@ public class ChatController implements Initializable
     //endregion
 
     //region Images
-    Image discBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/discbtnsmall.png"));
-    Image discBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/discbtn_oversmall.png"));
+    Image discBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/discbtn.png"));
+    Image discBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/discbtn_over.png"));
 
     Image sendBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/send_normal.png"));
     Image sendBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/send_over.png"));
-
-    Image joinBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/join_normal.png"));
-    Image joinBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/join_over.png"));
-
-    Image quitBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/quit_normal.png"));
-    Image quitBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/quit_over.png"));
 
     Image minBtnImage = new Image(getClass().getResourceAsStream("../GUI/Images/-.png"));
     Image minBtnImageOver = new Image(getClass().getResourceAsStream("../GUI/Images/-o.png"));
@@ -100,28 +94,6 @@ public class ChatController implements Initializable
         writeToServer("DATA " + username + " " + messageField.getText());
         Platform.runLater(() -> messageField.clear());
         messageField.requestFocus();
-    }
-
-    public void onJoinBtn(ActionEvent actionEvent)
-    {
-        writeToServer("JOIN " + username + " " + ipAddress + ":" + portNumber);
-        joinBtn.setDisable(true);
-        quitBtn.setDisable(false);
-        listPane.setDisable(false);
-        messagePane.setDisable(false);
-        sendIMAV();
-        messageField.requestFocus();
-    }
-
-    public void onQuitBtn(ActionEvent actionEvent)
-    {
-        writeToServer("QUIT");
-        ObservableList<String> observableList = FXCollections.observableArrayList();
-        Platform.runLater(() -> userList.getItems().setAll(observableList));
-        joinBtn.setDisable(false);
-        quitBtn.setDisable(true);
-        listPane.setDisable(true);
-        messagePane.setDisable(true);
     }
 
     public void onDisconnectBtn(ActionEvent actionEvent)
@@ -202,26 +174,6 @@ public class ChatController implements Initializable
         sendBtn.setGraphic(new ImageView(sendBtnImage));
     }
 
-    public void onJoinBtnEnter(MouseEvent mouseEvent)
-    {
-        joinBtn.setGraphic(new ImageView(joinBtnImageOver));
-    }
-
-    public void onJoinBtnExit(MouseEvent mouseEvent)
-    {
-        joinBtn.setGraphic(new ImageView(joinBtnImage));
-    }
-
-    public void onQuitBtnEnter(MouseEvent mouseEvent)
-    {
-        quitBtn.setGraphic(new ImageView(quitBtnImageOver));
-    }
-
-    public void onQuitBtnExit(MouseEvent mouseEvent)
-    {
-        quitBtn.setGraphic(new ImageView(quitBtnImage));
-    }
-
     public void onMinBtnEnter(MouseEvent mouseEvent)
     {
         minBtn.setGraphic(new ImageView(minBtnImageOver));
@@ -245,8 +197,6 @@ public class ChatController implements Initializable
     void setGraphics()
     {
         sendBtn.setGraphic(new ImageView(sendBtnImage));
-        joinBtn.setGraphic(new ImageView(joinBtnImage));
-        quitBtn.setGraphic(new ImageView(quitBtnImage));
         disconnectBtn.setGraphic(new ImageView(discBtnImage));
         minBtn.setGraphic(new ImageView(minBtnImage));
         closeBtn.setGraphic(new ImageView(closeBtnImage));
@@ -271,18 +221,49 @@ public class ChatController implements Initializable
             public void changed(ObservableValue<? extends String> o, String oldValue, String newValue)
             {
                 String command = newValue.substring(0, 4);
+
+                if (command.equals("J_OK"))
+                {
+                    listPane.setDisable(false);
+                    messagePane.setDisable(false);
+                    sendIMAV();
+                    Platform.runLater(() ->messageField.requestFocus());
+                }
+
                 if (command.equals("LIST"))
                 {
-                    String[] list = newValue.split("\\:");
-                    String formatList = list[1].replaceAll("[\\[\\](){}]","");
-                    String[] allNames = formatList.split(",");
-                    ObservableList<String> observableList = FXCollections.observableArrayList(allNames);
+                    String[] list = newValue.substring(5, newValue.length()).split(" ");
+                    ObservableList<String> observableList = FXCollections.observableArrayList(list);
                     Platform.runLater(() -> userList.getItems().setAll(observableList));
                 }
-                String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                chatField.setText(chatField.getText() + "- (" + timeString + ") " + newValue + "\n");
-                chatField.selectPositionCaret(chatField.getLength() - 1);
-                chatField.deselect();
+
+                if (command.equals("DATA"))
+                {
+                    String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                    String[] messageString = newValue.substring(5, newValue.length()).split(":");
+                    String nameString = messageString[0];
+                    Text date = new Text("-[" + timeString + "] ");
+                    date.setFill(Color.WHITE);
+                    Text name = new Text(nameString);
+                    name.setStyle("-fx-font-weight: bold");
+                    if (!nameString.equals(username))
+                    {
+                        name.setFill(Color.GOLD);
+                    }
+                    else
+                    {
+                        name.setFill(Color.GREEN);
+                    }
+                    Text message = new Text(": " + messageString[1] + "\n");
+                    message.setFill(Color.WHITE);
+                    Platform.runLater(() ->
+                    {
+                        chatField.getChildren().add(date);
+                        chatField.getChildren().add(name);
+                        chatField.getChildren().add(message);
+                        chatScroll.setVvalue(1.0);
+                    });
+                }
             }
         });
 
@@ -298,6 +279,10 @@ public class ChatController implements Initializable
                 else
                 {
                     sendBtn.setDisable(false);
+                }
+                if (newValue.matches("\n"))
+                {
+                    messageField.setText("");
                 }
             }
         });
@@ -341,13 +326,14 @@ public class ChatController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        ipLabel.setText("Internet Protocol address: " + ipAddress);
+        ipLabel.setText("IP address: " + ipAddress);
         portLabel.setText("Port number: " + portNumber);
         usernameLabel.setText("Username: " + username);
         addChangeListeners();
         handleStageMovement();
         setGraphics();
         chatClient.setOnExit(() -> Platform.runLater(() -> sceneHandler.changeScene("ClientScreen")));
+        Platform.runLater(() -> writeToServer("JOIN " + username + " " + ipAddress + ":" + portNumber));
     }
 
 }

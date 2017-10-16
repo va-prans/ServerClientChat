@@ -8,9 +8,16 @@
 
 <AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
    <children>
-      <AnchorPane layoutX="78.0" layoutY="57.0" prefHeight="380.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
+      <AnchorPane layoutX="78.0" layoutY="57.0" mouseTransparent="true" prefHeight="380.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
-            <TextArea id="chatarea" fx:id="chatField" editable="false" layoutX="44.0" layoutY="99.0" prefHeight="373.0" prefWidth="373.0" style="-fx-text-inner-color: white;" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ScrollPane fx:id="chatScroll" fitToHeight="true" fitToWidth="true" prefHeight="380.0" prefViewportHeight="200.0" prefViewportWidth="200.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <content>
+                  <TextFlow id="chatarea" fx:id="chatField" mouseTransparent="true" prefHeight="380.0" prefWidth="373.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding></TextFlow>
+               </content>
+            </ScrollPane>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="listPane" disable="true" layoutX="493.0" layoutY="159.0" prefHeight="363.0" prefWidth="234.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
@@ -38,20 +45,10 @@
             <Font name="Lucida Console" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="disconnectBtn" layoutX="646.0" layoutY="38.0" mnemonicParsing="false" onAction="#onDisconnectBtn" onMouseEntered="#onDisconnectBtnEnter" onMouseExited="#onDisconnectBtnExit" prefHeight="9.0" prefWidth="21.0">
+      <Button fx:id="disconnectBtn" layoutX="528.0" layoutY="514.0" mnemonicParsing="false" onAction="#onDisconnectBtn" onMouseEntered="#onDisconnectBtnEnter" onMouseExited="#onDisconnectBtnExit" prefHeight="9.0" prefWidth="21.0">
          <font>
             <Font size="5.0" />
          </font></Button>
-      <Button fx:id="joinBtn" layoutX="507.0" layoutY="535.0" mnemonicParsing="false" onAction="#onJoinBtn" onMouseEntered="#onJoinBtnEnter" onMouseExited="#onJoinBtnExit" prefHeight="24.0" prefWidth="30.0">
-         <font>
-            <Font name="LilyUPC" size="6.0" />
-         </font>
-      </Button>
-      <Button fx:id="quitBtn" disable="true" layoutX="623.0" layoutY="535.0" mnemonicParsing="false" onAction="#onQuitBtn" onMouseEntered="#onQuitBtnEnter" onMouseExited="#onQuitBtnExit" prefHeight="24.0" prefWidth="30.0">
-         <font>
-            <Font name="LilyUPC" size="5.0" />
-         </font>
-      </Button>
       <AnchorPane fx:id="messagePane" disable="true" layoutX="78.0" layoutY="443.0" prefHeight="131.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
             <Label layoutY="2.0" prefHeight="32.0" prefWidth="371.0" text="Type a message" textFill="WHITE">

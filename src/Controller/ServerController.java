@@ -12,20 +12,22 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ServerController implements Initializable
@@ -38,7 +40,9 @@ public class ServerController implements Initializable
     @FXML
     Label portLabel;
     @FXML
-    TextArea chatField;
+    TextFlow chatField;
+    @FXML
+    ScrollPane chatScroll;
     @FXML
     ListView<String> userList;
     @FXML
@@ -130,16 +134,30 @@ public class ServerController implements Initializable
                 String command = newValue.substring(0, 4);
                 if (command.equals("LIST"))
                 {
-                    String[] list = newValue.split("\\:");
-                    String formatList = list[1].replaceAll("[\\[\\](){}]", "");
-                    String[] allNames = formatList.split(",");
-                    ObservableList<String> observableList = FXCollections.observableArrayList(allNames);
+                    String[] list = newValue.substring(5, newValue.length()).split(" ");
+                    ObservableList<String> observableList = FXCollections.observableArrayList(list);
                     Platform.runLater(() -> userList.getItems().setAll(observableList));
                 }
-                String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-                chatField.setText(chatField.getText() + "- (" + timeString + ") " + newValue + "\n");
-                chatField.selectPositionCaret(chatField.getLength() - 1);
-                chatField.deselect();
+
+                if (command.equals("DATA"))
+                {
+                    String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                    String[] messageString = newValue.substring(5, newValue.length()).split(":");
+                    Text date = new Text("-[" + timeString + "] ");
+                    date.setFill(Color.WHITE);
+                    Text name = new Text(messageString[0]);
+                    name.setStyle("-fx-font-weight: bold");
+                    name.setFill(Color.GREEN);
+                    Text message = new Text(": " + messageString[1] + "\n");
+                    message.setFill(Color.WHITE);
+                    Platform.runLater(() ->
+                    {
+                        chatField.getChildren().add(date);
+                        chatField.getChildren().add(name);
+                        chatField.getChildren().add(message);
+                        chatScroll.setVvalue(1.0);
+                    });
+                }
             }
         });
     }
@@ -179,7 +197,7 @@ public class ServerController implements Initializable
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        ipLabel.setText("Internet Protocol address: " + ChatServer.IP);
+        ipLabel.setText("IP address: " + ChatServer.IP);
         portLabel.setText("Port number: " + ChatServer.PORT);
     }
 }
