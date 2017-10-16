@@ -340,6 +340,7 @@ public class ChatController implements Initializable
             log += text.getText();
         }
 
+        Path path = Paths.get(System.getProperty("user.dir") + "/Logs/" + LocalDate.now().toString() + "&LogID=" + System.nanoTime() + ".txt");
 
         try
         {
