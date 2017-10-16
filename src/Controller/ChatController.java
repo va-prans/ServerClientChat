@@ -3,6 +3,10 @@ package Controller;//Magnus Svendsen DAT16i
 import Handler.SceneHandler;
 import Model.ChatClient;
 import Model.Main;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,18 +19,17 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -263,7 +266,12 @@ public class ChatController implements Initializable
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
                     String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
                     String nameString = messageString[0];
-                    Text date = new Text("-[" + timeString + "] ");
+                    String newLine = "\n";
+                    if (chatField.getChildren().size() == 0)
+                    {
+                        newLine = "";
+                    }
+                    Text date = new Text(newLine + "-[" + timeString + "] ");
                     date.setFill(Color.WHITE);
                     Text name = new Text(nameString);
                     name.setStyle("-fx-font-weight: bold");
@@ -275,12 +283,15 @@ public class ChatController implements Initializable
                     {
                         name.setFill(Color.GREEN);
                     }
-                    Text message = new Text(": " + restOfMessage + "\n");
+                    Text message = new Text(": " + restOfMessage);
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
                         chatField.getChildren().addAll(date, name, message);
-                        chatScroll.setVvalue(1.0);
+                        Animation animation = new Timeline(
+                                new KeyFrame(Duration.seconds(1),
+                                        new KeyValue(chatScroll.vvalueProperty(), 1)));
+                        animation.play();
                     });
                 }
             }

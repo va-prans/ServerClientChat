@@ -3,6 +3,10 @@ package Controller;//Magnus Svendsen DAT16i
 import Handler.SceneHandler;
 import Model.ChatServer;
 import Model.Main;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -155,17 +160,25 @@ public class ServerController implements Initializable
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
                     String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
-                    Text date = new Text("-[" + timeString + "] ");
+                    String newLine = "\n";
+                    if (chatField.getChildren().size() == 0)
+                    {
+                        newLine = "";
+                    }
+                    Text date = new Text(newLine + "-[" + timeString + "] ");
                     date.setFill(Color.WHITE);
                     Text name = new Text(messageString[0]);
                     name.setStyle("-fx-font-weight: bold");
                     name.setFill(Color.GREEN);
-                    Text message = new Text(": " + restOfMessage + "\n");
+                    Text message = new Text(": " + restOfMessage);
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
                         chatField.getChildren().addAll(date, name, message);
-                        chatScroll.setVvalue(1.0);
+                        Animation animation = new Timeline(
+                                new KeyFrame(Duration.seconds(1),
+                                        new KeyValue(chatScroll.vvalueProperty(), 1)));
+                        animation.play();
                     });
                 }
             }
