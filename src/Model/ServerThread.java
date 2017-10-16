@@ -60,20 +60,22 @@ public class ServerThread extends Thread {
                             break;
                         case "QUIT":
                             if (authorized) {
-                                quit();
+                                shutdownSocket();
                             }
                             break;
                         default:
                             break;
                     }
                 }
-                quit();
             } catch (SocketException se) {
-                quit();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally
+        {
+            quit();
         }
     }
 

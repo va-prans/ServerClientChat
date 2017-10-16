@@ -21,8 +21,6 @@ public class FirstController implements Initializable
     @FXML
     AnchorPane rootPane;
     @FXML
-    ImageView titleBar;
-    @FXML
     Button hostBtn;
     @FXML
     Button clientBtn;
