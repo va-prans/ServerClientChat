@@ -12,11 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -26,7 +31,6 @@ import javafx.scene.text.TextFlow;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,6 +89,7 @@ public class ChatController implements Initializable
 
     double xOffset = 0;
     double yOffset = 0;
+    double startY = 1.0;
 
     SceneHandler sceneHandler = new SceneHandler();
 
@@ -218,6 +223,16 @@ public class ChatController implements Initializable
         sceneHandler.closeProgram();
     }
 
+    public void onChatPan(MouseEvent mouseEvent)
+    {
+        ((Node) mouseEvent.getSource()).setCursor(Cursor.CLOSED_HAND);
+    }
+
+    public void onChatPanExit(MouseEvent mouseEvent)
+    {
+        ((Node) mouseEvent.getSource()).setCursor(Cursor.OPEN_HAND);
+    }
+
     void addChangeListeners()
     {
         chatClient.getInputString().addListener(new ChangeListener<String>()
@@ -301,6 +316,24 @@ public class ChatController implements Initializable
                     sendBtn.fire();
                 }
             }
+        });
+
+        chatScroll.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            startY = e.getY();
+        });
+
+        chatScroll.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            double endY = e.getY();
+            Bounds viewBounds = chatScroll.getViewportBounds();
+
+            double startEndY = startY - endY;
+
+            Bounds contentBounds = chatScroll.getContent().getLayoutBounds();
+
+            double vChange = startEndY / (contentBounds.getHeight() - viewBounds.getHeight());
+            chatScroll.setVvalue(chatScroll.getVvalue() + vChange);
+
+            startY = endY;
         });
     }
 

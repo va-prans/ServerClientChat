@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -8,15 +10,18 @@
 
 <AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChatController">
    <children>
-      <AnchorPane layoutX="78.0" layoutY="57.0" mouseTransparent="true" prefHeight="380.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
+      <AnchorPane layoutX="78.0" layoutY="57.0" prefHeight="380.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
-            <ScrollPane fx:id="chatScroll" fitToHeight="true" fitToWidth="true" prefHeight="380.0" prefViewportHeight="200.0" prefViewportWidth="200.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ScrollPane fx:id="chatScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" onMousePressed="#onChatPan" onMouseReleased="#onChatPanExit" prefHeight="380.0" prefViewportHeight="200.0" prefViewportWidth="200.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <TextFlow id="chatarea" fx:id="chatField" mouseTransparent="true" prefHeight="380.0" prefWidth="373.0">
+                  <TextFlow id="chatarea" fx:id="chatField" prefHeight="380.0" prefWidth="373.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding></TextFlow>
                </content>
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor>
             </ScrollPane>
          </children>
       </AnchorPane>

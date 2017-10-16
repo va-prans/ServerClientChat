@@ -12,6 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -71,6 +74,7 @@ public class ServerController implements Initializable
 
     double xOffset = 0;
     double yOffset = 0;
+    double startY = 1.0;
 
     SceneHandler sceneHandler = new SceneHandler();
     ChatServer chatServer = new ChatServer();
@@ -166,6 +170,24 @@ public class ServerController implements Initializable
                 }
             }
         });
+
+        chatScroll.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            startY = e.getY();
+        });
+
+        chatScroll.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            double endY = e.getY();
+            Bounds viewBounds = chatScroll.getViewportBounds();
+
+            double startEndY = startY - endY;
+
+            Bounds contentBounds = chatScroll.getContent().getLayoutBounds();
+
+            double vChange = startEndY / (contentBounds.getHeight() - viewBounds.getHeight());
+            chatScroll.setVvalue(chatScroll.getVvalue() + vChange);
+
+            startY = endY;
+        });
     }
 
     void createLog()
@@ -192,6 +214,16 @@ public class ServerController implements Initializable
         {
             e.printStackTrace();
         }
+    }
+
+    public void onChatPan(MouseEvent mouseEvent)
+    {
+        ((Node) mouseEvent.getSource()).setCursor(Cursor.CLOSED_HAND);
+    }
+
+    public void onChatPanExit(MouseEvent mouseEvent)
+    {
+        ((Node) mouseEvent.getSource()).setCursor(Cursor.OPEN_HAND);
     }
 
     public void handleStageMovement()

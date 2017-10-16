@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -14,15 +15,18 @@
 
 <AnchorPane id="root" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ServerController">
    <children>
-      <AnchorPane layoutX="78.0" layoutY="149.0" mouseTransparent="true" prefHeight="373.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
+      <AnchorPane layoutX="78.0" layoutY="149.0" prefHeight="373.0" prefWidth="373.0" style="-fx-border-color: black; -fx-border-image-width: 1;">
          <children>
-            <ScrollPane fx:id="chatScroll" fitToHeight="true" fitToWidth="true" layoutX="1.0" layoutY="1.0" prefHeight="373.0" prefViewportHeight="371.0" prefViewportWidth="371.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ScrollPane fx:id="chatScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="1.0" layoutY="1.0" onMousePressed="#onChatPan" onMouseReleased="#onChatPanExit" prefHeight="373.0" prefViewportHeight="371.0" prefViewportWidth="371.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
                   <TextFlow id="chatarea" fx:id="chatField" mouseTransparent="true" prefHeight="373.0" prefWidth="373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding></TextFlow>
                </content>
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor>
             </ScrollPane>
          </children>
       </AnchorPane>
