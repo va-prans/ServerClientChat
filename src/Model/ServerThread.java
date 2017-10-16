@@ -93,9 +93,12 @@ public class ServerThread extends Thread {
     public void shutdownSocket()
     {
         try {
-            socket.shutdownOutput();
-            socket.shutdownInput();
-            socket.close();
+            if (!socket.isClosed())
+            {
+                socket.shutdownOutput();
+                socket.shutdownInput();
+                socket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

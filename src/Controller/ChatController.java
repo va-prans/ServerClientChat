@@ -26,11 +26,15 @@ import javafx.scene.text.TextFlow;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable
@@ -98,6 +102,7 @@ public class ChatController implements Initializable
 
     public void onDisconnectBtn(ActionEvent actionEvent)
     {
+        createLog();
         writeToServer("QUIT");
 
         try
@@ -118,7 +123,7 @@ public class ChatController implements Initializable
     {
         try
         {
-            if (chatClient.getSocket().isConnected())
+            if (!chatClient.getSocket().isClosed())
             {
                 PrintWriter printWriter = new PrintWriter(chatClient.getSocket().getOutputStream(), true);
                 String readerInput = text;
@@ -241,6 +246,7 @@ public class ChatController implements Initializable
                 {
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
+                    String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
                     String nameString = messageString[0];
                     Text date = new Text("-[" + timeString + "] ");
                     date.setFill(Color.WHITE);
@@ -254,13 +260,11 @@ public class ChatController implements Initializable
                     {
                         name.setFill(Color.GREEN);
                     }
-                    Text message = new Text(": " + messageString[1] + "\n");
+                    Text message = new Text(": " + restOfMessage + "\n");
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
-                        chatField.getChildren().add(date);
-                        chatField.getChildren().add(name);
-                        chatField.getChildren().add(message);
+                        chatField.getChildren().addAll(date, name, message);
                         chatScroll.setVvalue(1.0);
                     });
                 }
@@ -305,9 +309,9 @@ public class ChatController implements Initializable
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (chatClient.getSocket().isConnected())
+                while (!chatClient.getSocket().isClosed())
                 {
-                    if (!chatClient.getSocket().isConnected())
+                    if (chatClient.getSocket().isClosed())
                     {
                         break;
                     }
@@ -321,6 +325,31 @@ public class ChatController implements Initializable
             }
         });
         thread.start();
+    }
+
+    void createLog()
+    {
+        Text[] texts = new Text[chatField.getChildren().size()];
+        for (int i = 0; i < chatField.getChildren().size(); i++)
+        {
+            texts[i] = (Text)chatField.getChildren().get(i);
+        }
+        String log = "";
+        for (Text text : texts)
+        {
+            log += text.getText();
+        }
+
+
+        try
+        {
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+            Files.write(path, log.getBytes(), StandardOpenOption.APPEND);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

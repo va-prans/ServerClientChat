@@ -21,9 +21,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -72,6 +78,7 @@ public class ServerController implements Initializable
     public void onDisconnectBtn(ActionEvent actionEvent)
     {
         chatServer.stopServer();
+        createLog();
         sceneHandler.changeScene("FirstScreen");
     }
 
@@ -143,23 +150,48 @@ public class ServerController implements Initializable
                 {
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
+                    String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
                     Text date = new Text("-[" + timeString + "] ");
                     date.setFill(Color.WHITE);
                     Text name = new Text(messageString[0]);
                     name.setStyle("-fx-font-weight: bold");
                     name.setFill(Color.GREEN);
-                    Text message = new Text(": " + messageString[1] + "\n");
+                    Text message = new Text(": " + restOfMessage + "\n");
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
-                        chatField.getChildren().add(date);
-                        chatField.getChildren().add(name);
-                        chatField.getChildren().add(message);
+                        chatField.getChildren().addAll(date, name, message);
                         chatScroll.setVvalue(1.0);
                     });
                 }
             }
         });
+    }
+
+    void createLog()
+    {
+        Text[] texts = new Text[chatField.getChildren().size()];
+        for (int i = 0; i < chatField.getChildren().size(); i++)
+        {
+            texts[i] = (Text)chatField.getChildren().get(i);
+        }
+        String log = "";
+        for (Text text : texts)
+        {
+            log += text.getText();
+        }
+
+        Path path = Paths.get(System.getProperty("user.dir") + "/Logs/" + LocalDate.now().toString() + "&LogID=" + System.nanoTime() + ".txt");
+
+        try
+        {
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+            Files.write(path, log.getBytes(), StandardOpenOption.APPEND);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void handleStageMovement()
