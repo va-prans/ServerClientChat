@@ -42,10 +42,10 @@ public class ServerThread extends Thread {
                     switch (authenticationMsg) {
                         case "J_OK":
                             username = pMessage.substring(4, pMessage.length());
+                            ChatServer.usernameList.add(username);
                             onUserMessage.messageUpdate("DATA " + username + ": has joined the channel.");
                             authorized = true;
                             sendToUser(authenticationMsg);
-                            ChatServer.usernameList.add(username);
                             onUserMessage.messageUpdate("LIST " + userStringList());
                             break;
                         case "J_ER":

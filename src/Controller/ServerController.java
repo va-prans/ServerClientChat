@@ -27,6 +27,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -40,8 +41,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ServerController implements Initializable
@@ -80,6 +80,9 @@ public class ServerController implements Initializable
     double xOffset = 0;
     double yOffset = 0;
     double startY = 1.0;
+
+    Color[] nameColors = { Color.GREEN, Color.GOLD, Color.RED, Color.LIGHTBLUE, Color.PURPLE, Color.DARKORANGE, Color.SADDLEBROWN, Color.TEAL, Color.PINK, Color.LIGHTGREEN};
+    HashMap<String, Color> userColors = new HashMap<>();
 
     SceneHandler sceneHandler = new SceneHandler();
     ChatServer chatServer = new ChatServer();
@@ -151,6 +154,23 @@ public class ServerController implements Initializable
                 if (command.equals("LIST"))
                 {
                     String[] list = newValue.substring(5, newValue.length()).split(" ");
+                    for (String s : userColors.keySet())
+                    {
+                        boolean inList = false;
+                        for (String l : list)
+                        {
+                            if (s.equals(l))
+                            {
+                                inList = true;
+                                break;
+                            }
+                        }
+                        if (!inList)
+                        {
+                            userColors.remove(s);
+                            break;
+                        }
+                    }
                     ObservableList<String> observableList = FXCollections.observableArrayList(list);
                     Platform.runLater(() -> userList.getItems().setAll(observableList));
                 }
@@ -160,16 +180,23 @@ public class ServerController implements Initializable
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
                     String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
+                    String nameString = messageString[0];
+
+                    if (!userColors.containsKey(nameString))
+                    {
+                        assignColor(nameString);
+                    }
+
                     String newLine = "\n";
                     if (chatField.getChildren().size() == 0)
                     {
                         newLine = "";
                     }
-                    Text date = new Text(newLine + "-[" + timeString + "] ");
-                    date.setFill(Color.WHITE);
-                    Text name = new Text(messageString[0]);
+                    Text date = new Text(newLine + "[" + timeString + "] ");
+                    date.setFill(Color.LIGHTGREY);
+                    Text name = new Text(nameString);
                     name.setStyle("-fx-font-weight: bold");
-                    name.setFill(Color.GREEN);
+                    name.setFill(userColors.get(nameString));//(getUserColor(messageString[0]));
                     Text message = new Text(": " + restOfMessage);
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
@@ -201,6 +228,63 @@ public class ServerController implements Initializable
 
             startY = endY;
         });
+
+        userList.setCellFactory(new Callback<ListView<String>, ListCell<String>>()
+        {
+            @Override
+            public ListCell<String> call(ListView<String> stringListView)
+            {
+                return new ListCell<String>()
+                {
+                    @Override
+                    protected void updateItem(String stringValue, boolean empty)
+                    {
+                        super.updateItem(stringValue, empty);
+
+                        if (stringValue == null || empty)
+                        {
+                            setText(null);
+                            setGraphic(null);
+                        }
+                        else
+                        {
+                            setText(stringValue);
+                            Platform.runLater(() ->
+                            {
+                                if (!userColors.containsKey(stringValue))
+                                {
+                                    assignColor(stringValue);
+                                }
+                                Platform.runLater(() -> setTextFill(userColors.get(stringValue)));
+                            });
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    void assignColor(String stringValue)
+    {
+        Color newUserColor = Color.WHITE;
+        for (int i = 0; i < nameColors.length; i++)
+        {
+            boolean matches = false;
+            for (Color color : userColors.values())
+            {
+                if (color == nameColors[i])
+                {
+                    matches = true;
+                    break;
+                }
+            }
+            if (!matches)
+            {
+                newUserColor = nameColors[i];
+                break;
+            }
+        }
+        userColors.put(stringValue, newUserColor);
     }
 
     void createLog()
