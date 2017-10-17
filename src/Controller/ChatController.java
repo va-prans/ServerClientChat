@@ -108,7 +108,7 @@ public class ChatController implements Initializable
 
     public void onSendBtn(ActionEvent actionEvent)
     {
-        writeToServer("DATA " + username + " " + messageField.getText());
+        writeToServer("DATA " + username + ": " + messageField.getText());
         Platform.runLater(() -> messageField.clear());
         messageField.requestFocus();
     }
@@ -493,7 +493,7 @@ public class ChatController implements Initializable
         handleStageMovement();
         setGraphics();
         chatClient.setOnExit(() -> Platform.runLater(() -> sceneHandler.changeScene("ClientScreen")));
-        Platform.runLater(() -> writeToServer("JOIN " + username + " " + ipAddress + ":" + portNumber));
+        Platform.runLater(() -> writeToServer("JOIN " + username + ", " + ipAddress + ":" + portNumber));
     }
 
 }
