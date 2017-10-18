@@ -111,6 +111,19 @@ public class ChatController implements Initializable
         writeToServer("DATA " + username + ": " + messageField.getText());
         Platform.runLater(() -> messageField.clear());
         messageField.requestFocus();
+//        int timeout = 1000;
+//        while (true){
+//            writeToServer("DATA " + username + ": " + messageField.getText());
+//            try {
+//                Thread.sleep(timeout);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            timeout = timeout -10;
+//            if (timeout < 0){
+//                timeout = 1;
+//            }
+//        }
     }
 
     public void onDisconnectBtn(ActionEvent actionEvent)
@@ -284,6 +297,7 @@ public class ChatController implements Initializable
 
                 if (command.equals("DATA"))
                 {
+                    //Exception in thread "Thread-8" java.lang.StringIndexOutOfBoundsException: String index out of range: -1
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
                     String restOfMessage = newValue.substring(5 + messageString[0].length(), newValue.length());

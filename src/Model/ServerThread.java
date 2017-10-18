@@ -33,6 +33,11 @@ public class ServerThread extends Thread {
                         continue;
                     }
 
+                    //quickfix
+                    if (message.length() > 250){
+                        message = message.substring(0, 250);
+                    }
+
                     timeout = 60;
 
                     String pMessage = chatProtocol.handleUserMessage(message, socket.getInetAddress().toString());
