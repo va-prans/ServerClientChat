@@ -197,7 +197,7 @@ public class ServerController implements Initializable
                     Text name = new Text(nameString);
                     name.setStyle("-fx-font-weight: bold");
                     name.setFill(userColors.get(nameString));//(getUserColor(messageString[0]));
-                    Text message = new Text(": " + restOfMessage);
+                    Text message = new Text(" " + restOfMessage);
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
