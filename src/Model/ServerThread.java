@@ -53,9 +53,10 @@ public class ServerThread extends Thread {
                             break;
                         case "DATA":
                             if (authorized) {
-                                int length = 5 + username.length();
-                                String messageToSend = pMessage.substring(length, pMessage.length());
-                                onUserMessage.messageUpdate("DATA " + username + ":" + messageToSend);
+//                                int length = 5 + username.length();
+//                                String messageToSend = pMessage.substring(length, pMessage.length());
+//                                onUserMessage.messageUpdate("DATA " + username + ":" + messageToSend);
+                                onUserMessage.messageUpdate(pMessage);
                             }
                             break;
                         case "QUIT":

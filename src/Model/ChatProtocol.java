@@ -58,14 +58,13 @@ public class ChatProtocol {
     }
 
     private String handleData(String message, String ip) {
-        String messageToSend = message.substring(4, message.length());
         String[] jCommands = message.split(" ");
         String userName = jCommands[1].replace(":", "");
 
         for (ServerThread user : ChatServer.users) {
             if (user.getUsername().equals(userName)) {
                 if (user.getSocket().getInetAddress().toString().equals(ip)) {
-                    return "DATA" + messageToSend;
+                    return message;
                 }
                 else {
                     return "J_ER 411: IP mismatch";

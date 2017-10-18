@@ -179,7 +179,7 @@ public class ServerController implements Initializable
                 {
                     String timeString = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                     String[] messageString = newValue.substring(5, newValue.length()).split(":");
-                    String restOfMessage = newValue.substring(6 + messageString[0].length(), newValue.length());
+                    String restOfMessage = newValue.substring(5 + messageString[0].length(), newValue.length());
                     String nameString = messageString[0];
 
                     if (!userColors.containsKey(nameString))
@@ -196,8 +196,8 @@ public class ServerController implements Initializable
                     date.setFill(Color.LIGHTGREY);
                     Text name = new Text(nameString);
                     name.setStyle("-fx-font-weight: bold");
-                    name.setFill(userColors.get(nameString));//(getUserColor(messageString[0]));
-                    Text message = new Text(" " + restOfMessage);
+                    name.setFill(userColors.get(nameString));
+                    Text message = new Text(restOfMessage);
                     message.setFill(Color.WHITE);
                     Platform.runLater(() ->
                     {
